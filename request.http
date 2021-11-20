@@ -1,0 +1,119 @@
+POST http://localhost:3000/customers/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "customerNumber": 2,
+  "customerName": "string",
+  "contactLastName": "string",
+  "contactFirstName": "string",
+  "phone": "string",
+  "addressLine1": "string",
+  "city": "string",
+  "country": "string"
+}
+
+###
+
+GET http://localhost:3000/customers/list HTTP/1.1
+
+###
+
+DELETE http://localhost:3000/customers/2 HTTP/1.1
+
+###
+
+GET http://localhost:3000/employees/best2/money HTTP/1.1
+
+###
+
+POST http://localhost:3000/orders/details HTTP/1.1
+Content-Type: application/json
+
+{
+  "orderNumber": 10100,
+  "productCode": "S10_1949",
+  "quantityOrdered": 10,
+  "priceEach": "10.30",
+  "orderLineNumber": 5
+}
+
+###
+
+PUT http://localhost:3000/orders/10100/details/S10_1949 HTTP/1.1
+Content-Type: application/json
+
+{
+  "quantityOrdered": 5
+}
+
+###
+
+DELETE http://localhost:3000/orders/10100/details/5 HTTP/1.1
+
+###
+
+GET http://localhost:3000/productlines/ HTTP/1.1
+
+###
+
+GET http://localhost:3000/payments/bestmonth/2005 HTTP/1.1
+
+###
+
+GET http://localhost:3000/payments/2004-05-14 HTTP/1.1
+
+###
+
+GET http://localhost:3000/payments/between/2004-12-31/2005-02-15 HTTP/1.1
+
+###
+
+GET http://localhost:3000/payments/sum/2005/between/2/5 HTTP/1.1
+
+###
+
+POST http://localhost:3000/products/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "productCode": "S0_000",
+  "productName": "Basic Name",
+  "productLine": "Planes",
+  "productScale": "1:18",
+  "productVendor": "A Basic Brand",
+  "productDescription": "a description",
+  "quantityInStock": 15,
+  "buyPrice": 15.26,
+  "MSRP": 30.5
+}
+
+###
+
+PUT http://localhost:3000/products/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "productCode": "S0_000",
+  "productName": "Cool Name",
+  "MSRP": 150000.6
+}
+
+###
+
+DELETE http://localhost:3000/products/S0_000 HTTP/1.1
+
+###
+
+GET http://localhost:3000/products/3best/money HTTP/1.1
+
+###
+
+GET http://localhost:3000/products/3best/quantity HTTP/1.1
+
+###
+
+GET http://localhost:3000/employees/1102/referers HTTP/1.1
+
+###
+
+GET http://localhost:3000/customers/nopayment/2004 HTTP/1.1

@@ -1,0 +1,66 @@
+<%- include ('../partials/header.ejs') %>
+
+<div class="mt-4 p-5 bg-success text-white rounded">
+    <a href="/users/add" class="btn btn-info">Add new user</a>
+    <% if (users) { %>
+    <ul>
+        <% users.forEach(function(user){ %>
+            <li>
+                <%= user.firstName + " " + user.lastName %>
+                <a style="color:blue;font-weight: bold" href="/users/edit/ <%= user.id %>">Edit</a>
+                |
+                <a style="color:red;font-weight: bold" onclick="deleteUser(<%= user.id %>)" href="#">Delete</a>
+            </li>
+        <% }) %>
+    </ul>
+    <% } %>
+</div>
+
+<script>
+    (async () =>{
+        //let url = "http://127.0.0.1:3000/users/list"
+        let url = "/users/list"
+        let response = await fetch(url,{mode: 'cors'});
+
+        if (response.ok) { // if HTTP-status is 200-299
+            // get the response body
+            let json = await response.json();
+            document.getElementById('p-response').innerText=JSON.stringify(json);
+        } else {
+            document.getElementById('p-response').innerText="HTTP-Error: " + response.status;
+        }
+    })();
+
+    async function deleteUser(id){
+        let post = JSON.stringify({
+            id: id
+        });
+        console.log(post);
+        let url = "/users/delete";
+        let response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                    //Origin: origin
+                },
+                body: post
+            },
+            {mode: 'cors'});
+        if (response.ok) { // if HTTP-status is 200-299
+            // get the response body
+            let json = await response.json();
+            document.getElementById('p-response').innerText=JSON.stringify(json);
+            setTimeout(()=>{
+                window.location.href = "/users";
+            },300);
+        } else {
+            document.getElementById('p-response').innerText="HTTP-Error: " + response.status;
+        }
+    }
+
+</script>
+
+<%- include ('../partials/footer.ejs') %>
+
+

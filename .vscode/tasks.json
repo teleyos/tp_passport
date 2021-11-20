@@ -1,0 +1,33 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "SequelizeAuto",
+			"command": "${workspaceFolder}\\node_modules\\.bin\\sequelize-auto",
+			"type": "shell",
+			"args": [
+				"-h",
+				"${env:DB_HOST}",
+				"-d",
+				"${env:DB_Database}",
+				"-u",
+				"${env:DB_USER}",
+				"-x",
+				"${env:DB_PWD}",
+				"-e",
+				"${env:DB_DIALECT}",
+				"-c",
+				"${workspaceFolder}\\config",
+				"-o",
+				"${workspaceFolde}\\servides",
+			],
+			"problemMatcher": [
+				"$tsc"
+			],
+			"presentation": {
+				"reveal": "always"
+			},
+			"group": "build",
+		},
+	]
+}
