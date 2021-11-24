@@ -9,6 +9,7 @@ var _payments = require("./payments");
 var _posts = require("./posts");
 var _productlines = require("./productlines");
 var _products = require("./products");
+var _users = require('./users');
 
 function initModels(sequelize) {
   var comments = _comments(sequelize, DataTypes);
@@ -21,6 +22,7 @@ function initModels(sequelize) {
   var posts = _posts(sequelize, DataTypes);
   var productlines = _productlines(sequelize, DataTypes);
   var products = _products(sequelize, DataTypes);
+  var users = _users(sequelize, DataTypes);
 
   orders.belongsToMany(products, { as: 'productCode_products', through: orderdetails, foreignKey: "orderNumber", otherKey: "productCode" });
   products.belongsToMany(orders, { as: 'orderNumber_orders', through: orderdetails, foreignKey: "productCode", otherKey: "orderNumber" });
@@ -54,6 +56,7 @@ function initModels(sequelize) {
     posts,
     productlines,
     products,
+    users,
   };
 }
 module.exports = initModels;

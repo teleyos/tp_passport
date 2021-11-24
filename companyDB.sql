@@ -2,6 +2,18 @@ CREATE DATABASE IF NOT EXISTS `companyDB`;
 USE `companyDB`;
 SET FOREIGN_KEY_CHECKS=0;
 
+drop table if exists `users`;
+
+create table `users` (
+  `id` int auto_increment not null,
+  `username` varchar(20),
+  `email` varchar(70) not null,
+  `password` text not null,
+  primary key (`id`)
+);
+
+insert into `users` (`id`,`username`,`email`,`password`) values (0,"test","test@test.test","hashtest");
+
 
 /*Table structure for table `customers` */
 DROP TABLE IF EXISTS `customers`;

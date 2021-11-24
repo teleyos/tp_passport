@@ -1,7 +1,11 @@
 const express = require("express");
 const app = express();
+const passport = require("passport")
 //later
 const bodyParser = require("body-parser");
+const flash = require('express-flash')
+const session = require('express-session')
+const methodOverride = require("method-override")
 //ADD Routers
 const customersRoutes = require("./routes/customers.routes")
 const employeesRoutes = require("./routes/employees.routes")
@@ -10,6 +14,9 @@ const ordersRoutes = require("./routes/orders.routes")
 const productLinesRoutes = require("./routes/prodcutLines.routes")
 const paymentsRoutes = require("./routes/payments.routes")
 const productsRoutes = require("./routes/products.routes")
+const authController = require("./controllers/auth.controller")
+const passportController = require("./controllers/passport.controller")
+const userController = require("./controllers/users.controller")
 //ADD SWAGGER MODULES
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
@@ -17,6 +24,16 @@ const swaggerUi = require("swagger-ui-express");
 const dotenv = require("dotenv");
 dotenv.config();
 
+passportController.initialisePassport(passport)
+
+app.use(flash())
+app.use(session({
+    secret: process.env.SECRET_TOKEN,
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
 
 // Static Files
 app.use(express.static('public'))
@@ -37,6 +54,9 @@ app.use(function(req, res, next) {
 
 //later (this is a middleware)
 app.use(bodyParser.json());
+app.use(express.json())
+app.use(express.urlencoded({extended:false}))
+
 /** Swagger Initialization - START */
 const swaggerOption = {
     swaggerDefinition: (swaggerJsdoc.Options = {
@@ -53,16 +73,27 @@ const swaggerOption = {
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOption);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use("/api-docs",authController.checkAuthenitcated ,swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 /** Swagger Initialization - END */
 
-app.use("/customers",customersRoutes)
-app.use("/employees",employeesRoutes)
-app.use("/offices",officesRoutes)
-app.use("/orders",ordersRoutes)
-app.use("/productlines",productLinesRoutes)
-app.use("/payments",paymentsRoutes)
-app.use("/products",productsRoutes)
+app.use("/customers",authController.checkAuthenitcated,customersRoutes)
+app.use("/employees",authController.checkAuthenitcated,employeesRoutes)
+app.use("/offices",authController.checkAuthenitcated,officesRoutes)
+app.use("/orders",authController.checkAuthenitcated,ordersRoutes)
+app.use("/productlines",authController.checkAuthenitcated,productLinesRoutes)
+app.use("/payments",authController.checkAuthenitcated,paymentsRoutes)
+app.use("/products",authController.checkAuthenitcated,productsRoutes)
+
+app.get("/login",authController.checkNotAuthenitcated,authController.renderLogin)
+app.post("/login",authController.checkNotAuthenitcated,passport.authenticate('local',{
+    successRedirect: "/api-docs",
+    failureRedirect: "/login",
+    failureFlash: true
+}))
+app.get("/register",authController.checkNotAuthenitcated,authController.renderRegister)
+app.post("/register",authController.checkNotAuthenitcated,authController.register)
+app.get("/logout",authController.checkAuthenitcated,authController.logout)
+
 
 app.listen(process.env.PORT,()=>{
     console.log(`Le serveur ecoute sur le port ${process.env.PORT}`);
